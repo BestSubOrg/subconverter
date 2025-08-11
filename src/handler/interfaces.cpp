@@ -328,6 +328,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
         readConf();
 
     /// string values
+    std::string argProxy = getUrlArg(argument, "proxy");
     std::string argUrl = getUrlArg(argument, "url");
     std::string argGroupName = getUrlArg(argument, "group"), argUploadPath = getUrlArg(argument, "upload_path");
     std::string argIncludeRemark = getUrlArg(argument, "include"), argExcludeRemark = getUrlArg(argument, "exclude");
@@ -400,9 +401,6 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
     template_args tpl_args;
     tpl_args.global_vars = global.templateVars;
     tpl_args.request_params = req_arg_map;
-
-    /// check for proxy settings
-    std::string proxy = parseProxy(global.proxySubscription);
 
     /// check other flags
     ext.authorized = authorized;
@@ -602,7 +600,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
     int groupID = 0;
 
     parse_settings parse_set;
-    parse_set.proxy = &proxy;
+    parse_set.proxy = &argProxy;
     parse_set.exclude_remarks = &lExcludeRemarks;
     parse_set.include_remarks = &lIncludeRemarks;
     parse_set.stream_rules = &stream_temp;
@@ -756,7 +754,6 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
         managed_url = global.managedConfigPrefix + "/sub?" + joinArguments(argument);
 
     //std::cerr<<"Generate target: ";
-    proxy = parseProxy(global.proxyConfig);
     switch(hash_(argTarget))
     {
     case "clash"_hash: case "clashr"_hash:
@@ -771,7 +768,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
         }
         else
         {
-            if(render_template(fetchFile(lClashBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+            if(render_template(fetchFile(lClashBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
             {
                 *status_code = 400;
                 return base_content;
@@ -795,7 +792,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
         }
         else
         {
-            if(render_template(fetchFile(lSurgeBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+            if(render_template(fetchFile(lSurgeBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
             {
                 *status_code = 400;
                 return base_content;
@@ -813,7 +810,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
     case "surfboard"_hash:
         writeLog(0, "Generate target: Surfboard", LOG_LEVEL_INFO);
 
-        if(render_template(fetchFile(lSurfboardBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+        if(render_template(fetchFile(lSurfboardBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
         {
             *status_code = 400;
             return base_content;
@@ -829,7 +826,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
     case "mellow"_hash:
         writeLog(0, "Generate target: Mellow", LOG_LEVEL_INFO);
 
-        if(render_template(fetchFile(lMellowBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+        if(render_template(fetchFile(lMellowBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
         {
             *status_code = 400;
             return base_content;
@@ -842,7 +839,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
     case "sssub"_hash:
         writeLog(0, "Generate target: SS Subscription", LOG_LEVEL_INFO);
 
-        if(render_template(fetchFile(lSSSubBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+        if(render_template(fetchFile(lSSSubBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
         {
             *status_code = 400;
             return base_content;
@@ -885,7 +882,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
         writeLog(0, "Generate target: Quantumult", LOG_LEVEL_INFO);
         if(!ext.nodelist)
         {
-            if(render_template(fetchFile(lQuanBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+            if(render_template(fetchFile(lQuanBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
             {
                 *status_code = 400;
                 return base_content;
@@ -901,7 +898,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
         writeLog(0, "Generate target: Quantumult X", LOG_LEVEL_INFO);
         if(!ext.nodelist)
         {
-            if(render_template(fetchFile(lQuanXBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+            if(render_template(fetchFile(lQuanXBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
             {
                 *status_code = 400;
                 return base_content;
@@ -917,7 +914,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
         writeLog(0, "Generate target: Loon", LOG_LEVEL_INFO);
         if(!ext.nodelist)
         {
-            if(render_template(fetchFile(lLoonBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+            if(render_template(fetchFile(lLoonBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
             {
                 *status_code = 400;
                 return base_content;
@@ -939,7 +936,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
         writeLog(0, "Generate target: sing-box", LOG_LEVEL_INFO);
         if(!ext.nodelist)
         {
-            if(render_template(fetchFile(lSingBoxBase, proxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
+            if(render_template(fetchFile(lSingBoxBase, argProxy, global.cacheConfig), tpl_args, base_content, global.templatePath) != 0)
             {
                 *status_code = 400;
                 return base_content;
